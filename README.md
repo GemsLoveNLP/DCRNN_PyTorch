@@ -84,7 +84,7 @@ python -m scripts.generate_training_data --output_dir=data/PEMS-BAY --traffic_df
 # Create the data directory
 mkdir -p data/data_folder
 
-# METR-LA
+# Generate data
 python -m scripts.generate_training_data --output_dir=data/data_folder --traffic_df_filename=data/processed_data.h5
 ```
 
@@ -100,7 +100,7 @@ cat data/sensor_id.txt
 # 02t,03t,11t,12t,...
 # Note: These are station names in the order of the columns in df separated by comma
 
->_ cat data/distances.csv
+cat data/distances.csv
 # from,to,distance
 # 02t,03t,13.238260735847284
 # 02t,11t,10.133110118413628
