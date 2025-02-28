@@ -4,14 +4,14 @@ data:
   dataset_dir: "data/data_folder"  # Path to time series data
   batch_size: 32  # Batch size for training and evaluation
   test_batch_size: 64
-  sequence_length: 12  # Sequence length for model input (seq_len)
-  horizon: 12  # Horizon for model output (horizon)
+  # sequence_length: 12  # Sequence length for model input (seq_len)
+  # horizon: 12  # Horizon for model output (horizon)
   scaler_file: "data/scaler.pkl"  # File for scaler object used for standardization
 
 model:
   # Model architecture parameters
-  num_nodes: 10  # Number of nodes (sensors)
-  input_dim: 1  # Input feature dimension (e.g., one feature per sensor)
+  num_nodes: 92  # Number of nodes (sensors)
+  input_dim: 2  # Input feature dimension (e.g., one feature per sensor)
   seq_len: 12  # Sequence length for the encoder (input sequence length)
   output_dim: 1  # Output feature dimension
   num_rnn_layers: 2  # Number of RNN layers
@@ -21,11 +21,11 @@ model:
   filter_type: "random_walk"  # Filter type for the diffusion model
   filter_type_abbr: "R"  # Abbreviation for the filter type
   dropout: 0.3  # Dropout rate for the model layers
-  horizon: 24 # Predict the next 24 steps
+  horizon: 12 # Predict the next 24 steps
 
 train:
   # Training specific parameters
-  batch_size: 64  # Batch size for training
+  # batch_size: 64  # Batch size for training
   epochs: 100  # Number of training epochs
   learning_rate: 0.001  # Learning rate for the optimizer
   base_lr: 0.001  # Base learning rate for training
@@ -36,7 +36,7 @@ train:
   save_model: 1  # Whether to save the model at each epoch
   log_every: 1  # Frequency of logging during training
   max_grad_norm: 5.0  # Maximum gradient norm for gradient clipping
-  epsilon: 1e-8  # Epsilon for the Adam optimizer
+  epsilon: 0.00000001  # Epsilon for the Adam optimizer
 
 logging:
   # Logging related parameters

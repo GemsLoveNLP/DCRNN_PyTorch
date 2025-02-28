@@ -271,7 +271,9 @@ class DCRNNSupervisor:
         :param y: shape (horizon, batch_size, num_sensor, input_dim)
         :return: x: shape (seq_len, batch_size, num_sensor * input_dim)
                  y: shape (horizon, batch_size, num_sensor * output_dim)
+                 
         """
+        print("X shape:", x.shape)
         batch_size = x.size(1)
         x = x.view(self.seq_len, batch_size, self.num_nodes * self.input_dim)
         y = y[..., :self.output_dim].view(self.horizon, batch_size,
