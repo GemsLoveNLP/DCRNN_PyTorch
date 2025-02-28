@@ -37,6 +37,9 @@ In MAE (For LA dataset, PEMS-BAY coming in a while)
 ## Data Preparation
 The traffic data files for Los Angeles (METR-LA) and the Bay Area (PEMS-BAY), i.e., `metr-la.h5` and `pems-bay.h5`, are available at [Google Drive](https://drive.google.com/open?id=10FOTa6HXPqX8Pf5WRoRwcFnW9BrNZEIX) or [Baidu Yun](https://pan.baidu.com/s/14Yy9isAIZYdU__OYEQGa_g), and should be
 put into the `data/` folder.
+
+For PM 2.5, the scrapped and prepped data can be found in [this](https://github.com/GemsLoveNLP/PM25) repository. The important files are already ported here.
+
 The `*.h5` files store the data in `panads.DataFrame` using the `HDF5` file format. Here is an example:
 
 |                     | sensor_0 | sensor_1 | sensor_2 | sensor_n |
@@ -45,7 +48,6 @@ The `*.h5` files store the data in `panads.DataFrame` using the `HDF5` file form
 | 2018/01/01 00:05:00 |   61.0   |   64.0   |   65.0   |    ...   |
 | 2018/01/01 00:10:00 |   63.0   |   65.0   |   60.0   |    ...   |
 |         ...         |    ...   |    ...   |    ...   |    ...   |
-
 
 Here is an article about [Using HDF5 with Python](https://medium.com/@jerilkuriakose/using-hdf5-with-python-6c5242d08773).
 
@@ -57,6 +59,14 @@ python scripts/format_h5.py
 # Check
 python scripts/view_h5.py
 ```
+The result should look as follows
+
+|      date_time      |   02t    |   03t    |   11t    |   CODE   |
+|:-------------------:|:--------:|:--------:|:--------:|:--------:|
+| 2025-01-19 01:00:00 |   55.5   |   51.7   |   47.1   |    ...   |
+| 2025-01-19 02:05:00 |   60.3   |   56.6   |   48.1   |    ...   |
+| 2025-01-19 03:10:00 |   57.9   |   58.1   |   46.2   |    ...   |
+|         ...         |    ...   |    ...   |    ...   |    ...   |
 
 Run the following commands to generate train/test/val dataset at  `data/{METR-LA,PEMS-BAY}/{train,val,test}.npz`.
 ```bash
@@ -81,7 +91,30 @@ python -m scripts.generate_training_data --output_dir=data/data_folder --traffic
 ## Graph Construction
  As the currently implementation is based on pre-calculated road network distances between sensors, it currently only
  supports sensor ids in Los Angeles (see `data/sensor_graph/sensor_info_201206.csv`).
+
+For PM 2.5, we must first create sensor_id.txt an distances.csv files first. Examples are shown below
+
 ```bash
+# See sensor_id.txt
+cat data/sensor_id.txt
+# 02t,03t,11t,12t,...
+# Note: These are station names in the order of the columns in df separated by comma
+
+>_ cat data/distances.csv
+# from,to,distance
+# 02t,03t,13.238260735847284
+# 02t,11t,10.133110118413628
+# 02t,12t,6.744473949099778
+# ...
+# 03t,11t,23.028538195596784
+# 03t,12t,16.512291166148593
+# ...
+# Note: These are pairs of stations and their distances
+```
+
+
+```bash
+# Original Command
 python -m scripts.gen_adj_mx  --sensor_ids_filename=data/sensor_graph/graph_sensor_ids.txt --normalized_k=0.1\
     --output_pkl_filename=data/sensor_graph/adj_mx.pkl
 
@@ -102,7 +135,7 @@ python -m scripts.gen_adj_mx --normalized_k=0.1\
 ```
 Besides, the locations of sensors in Los Angeles, i.e., METR-LA, are available at [data/sensor_graph/graph_sensor_locations.csv](https://github.com/liyaguang/DCRNN/blob/master/data/sensor_graph/graph_sensor_locations.csv). 
 
-For PM2.5, the important files are in the [data/] directory
+For PM2.5, the important files are in the [data](https://github.com/GemsLoveNLP/DCRNN_PyTorch/tree/pytorch_scratch/data) directory
 
 ## Run the Pre-trained Model on METR-LA
 
