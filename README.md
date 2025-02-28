@@ -49,6 +49,15 @@ The `*.h5` files store the data in `panads.DataFrame` using the `HDF5` file form
 
 Here is an article about [Using HDF5 with Python](https://medium.com/@jerilkuriakose/using-hdf5-with-python-6c5242d08773).
 
+For PM2.5, we can use the new scripts to convert pandas df files into the correctly formatted h5 files
+```bash
+# Convert
+python scripts/format_h5.py
+
+# Check
+python scripts/view_h5.py
+```
+
 Run the following commands to generate train/test/val dataset at  `data/{METR-LA,PEMS-BAY}/{train,val,test}.npz`.
 ```bash
 # Create data directories
@@ -59,6 +68,14 @@ python -m scripts.generate_training_data --output_dir=data/METR-LA --traffic_df_
 
 # PEMS-BAY
 python -m scripts.generate_training_data --output_dir=data/PEMS-BAY --traffic_df_filename=data/pems-bay.h5
+
+# --------------------------
+
+# Create the data directory
+mkdir -p data/data_folder
+
+# METR-LA
+python -m scripts.generate_training_data --output_dir=data/data_folder --traffic_df_filename=data/processed_data.h5
 ```
 
 ## Graph Construction
@@ -67,8 +84,25 @@ python -m scripts.generate_training_data --output_dir=data/PEMS-BAY --traffic_df
 ```bash
 python -m scripts.gen_adj_mx  --sensor_ids_filename=data/sensor_graph/graph_sensor_ids.txt --normalized_k=0.1\
     --output_pkl_filename=data/sensor_graph/adj_mx.pkl
+
+# ---------------------
+
+# Create the graph directory
+mkdir -p data/graph_folder
+
+# Generate the correctly formatted sensor_ids, distances files
+python -m scripts.generate_sensor_id 
+python -m scripts.generate_distances_file
+
+# Adjacency Matrix
+python -m scripts.gen_adj_mx --normalized_k=0.1\
+--sensor_ids_filename=data/sensor_id.txt\
+---distances_filename=data/distances.csv\
+--output_pkl_filename=data/sensor_graph/adj_mx.pkl
 ```
-Besides, the locations of sensors in Los Angeles, i.e., METR-LA, are available at [data/sensor_graph/graph_sensor_locations.csv](https://github.com/liyaguang/DCRNN/blob/master/data/sensor_graph/graph_sensor_locations.csv).
+Besides, the locations of sensors in Los Angeles, i.e., METR-LA, are available at [data/sensor_graph/graph_sensor_locations.csv](https://github.com/liyaguang/DCRNN/blob/master/data/sensor_graph/graph_sensor_locations.csv). 
+
+For PM2.5, the important files are in the [data/] directory
 
 ## Run the Pre-trained Model on METR-LA
 
@@ -92,6 +126,8 @@ python dcrnn_train_pytorch.py --config_filename=data/model/dcrnn_bay.yaml
 ```
 
 There is a chance that the training loss will explode, the temporary workaround is to restart from the last saved model before the explosion, or to decrease the learning rate earlier in the learning rate schedule. 
+
+The config.yaml file is where the training parameters are stored.
 
 
 ## Eval baseline methods

@@ -7,6 +7,8 @@ output_filename = "data/processed_data.h5"
 
 # Load the DataFrame from the h5 file
 df = pd.read_hdf(input_filename)
+# or 
+# df = pd.read_csv(input_filename)
 df['datetime'] = pd.to_datetime(df['datetime'])
 df = df.set_index("datetime")
 
