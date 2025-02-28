@@ -104,3 +104,6 @@ ENV/
 
 # log
 experiments/
+
+# model
+models/
