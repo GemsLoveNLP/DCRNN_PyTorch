@@ -232,6 +232,7 @@ class DCRNNSupervisor:
 
             if val_loss < min_val_loss:
                 wait = 0
+                # print("save_model",save_model)
                 if save_model:
                     model_file_name = self.save_model(epoch_num)
                     self._logger.info(
