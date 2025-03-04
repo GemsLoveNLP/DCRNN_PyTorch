@@ -95,11 +95,19 @@ python -m scripts.generate_training_data --output_dir=data/data_folder --traffic
 For PM 2.5, we must first create sensor_id.txt an distances.csv files first. Examples are shown below
 
 ```bash
+# Create the graph directory
+mkdir -p data/graph_folder
+
+# Generate the correctly formatted sensor_ids, distances files
+python -m scripts.generate_sensor_id 
+python -m scripts.generate_distances_file
+
 # See sensor_id.txt
 cat data/sensor_id.txt
 # 02t,03t,11t,12t,...
 # Note: These are station names in the order of the columns in df separated by comma
 
+# See the distances data
 cat data/distances.csv
 # from,to,distance
 # 02t,03t,13.238260735847284
@@ -119,13 +127,6 @@ python -m scripts.gen_adj_mx  --sensor_ids_filename=data/sensor_graph/graph_sens
     --output_pkl_filename=data/sensor_graph/adj_mx.pkl
 
 # ---------------------
-
-# Create the graph directory
-mkdir -p data/graph_folder
-
-# Generate the correctly formatted sensor_ids, distances files
-python -m scripts.generate_sensor_id 
-python -m scripts.generate_distances_file
 
 # Adjacency Matrix
 python -m scripts.gen_adj_mx --normalized_k=0.1\

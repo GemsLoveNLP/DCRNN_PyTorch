@@ -40,7 +40,7 @@ def main(args):
     distances_list = []
 
     for i in range(n):
-        for j in range(i + 1, n):
+        for j in range(n):
             from_sensor = sensor_ids[i]
             to_sensor = sensor_ids[j]
             distance = distance_matrix[i, j]
