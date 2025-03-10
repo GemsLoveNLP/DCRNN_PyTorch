@@ -1,5 +1,10 @@
 # Diffusion Convolutional Recurrent Neural Network: Data-Driven Traffic Forecasting
 
+## Note
+---------------------------------------------------------------------------------------------------
+Current best performance: "legacy_models/first_new_data_epo6.tar" (MAE: 6.433152079582214)
+---------------------------------------------------------------------------------------------------
+
 ![Diffusion Convolutional Recurrent Neural Network](figures/model_architecture.jpg "Model Architecture")
 
 This is a PyTorch implementation of Diffusion Convolutional Recurrent Neural Network in the following paper: \
