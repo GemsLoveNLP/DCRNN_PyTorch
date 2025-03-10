@@ -164,18 +164,14 @@ The config.yaml file is where the training parameters are stored.
 ## Eval baseline methods
 ```bash
 # METR-LA
-python -m scripts.eval_baseline_methods --traffic_reading_filename=data/metr-la.h5
+python -m scripts.eval_baseline_methods --traffic_reading_filename=data/preprocess/processed_data.h5
 ```
 
 ### PyTorch Results
 
-![PyTorch Results](figures/result1.png "PyTorch Results")
+![PyTorch Results](figures/output1.png "PyTorch Results")
 
-![PyTorch Results](figures/result2.png "PyTorch Results")
-
-![PyTorch Results](figures/result3.png "PyTorch Results")
-
-![PyTorch Results](figures/result4.png "PyTorch Results")
+![PyTorch Results](figures/output2.png "PyTorch Results")
 
 ## Citation
 
