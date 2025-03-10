@@ -13,7 +13,7 @@ model:
   output_dim: 1  # Output feature dimension
   num_rnn_layers: 2  # Number of RNN layers
   rnn_units: 128  # Number of units in each RNN layer
-  max_diffusion_step: 4  # Max diffusion step for graph convolution
+  max_diffusion_step: 3  # Max diffusion step for graph convolution
   use_curriculum_learning: false  # Whether to use curriculum learning
   filter_type: "dual random_walk"  # Diffusion model filter, in case there are other factors than uni directional wind
   filter_type_abbr: "R"  # Abbreviation for the filter type
@@ -23,7 +23,7 @@ model:
 
 train:
   # Training specific parameters
-  epochs: 300  # Number of training epochs
+  epochs: 100  # Number of training epochs
   learning_rate: 0.001  # Learning rate for the optimizer
   base_lr: 0.001  # Base learning rate for training
   steps: [50, 100, 150]  # Learning rate decay milestones
