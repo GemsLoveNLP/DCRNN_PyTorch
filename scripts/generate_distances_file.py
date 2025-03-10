@@ -58,7 +58,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--input_filename",
         type=str,
-        default="data/addr_latlong.csv",
+        default="data/preprocess/addr_latlong.csv",
         help="Address CSV",
     )
     parser.add_argument(
@@ -82,7 +82,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--output_filename", 
         type=str, 
-        default="data/distances.csv", 
+        default="data/preprocess/distances.csv", 
         help="Output directory."
     )
 

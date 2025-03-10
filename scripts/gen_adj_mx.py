@@ -44,9 +44,9 @@ def get_adjacency_matrix(distance_df, sensor_ids, normalized_k=0.1):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--sensor_ids_filename', type=str, default='data/sensor_id.txt',
+    parser.add_argument('--sensor_ids_filename', type=str, default='data/preprocess/sensor_id.txt',
                         help='File containing sensor ids separated by comma.')
-    parser.add_argument('--distances_filename', type=str, default='data/distances.csv',
+    parser.add_argument('--distances_filename', type=str, default='data/preprocess/distances.csv',
                         help='CSV file containing sensor distances with three columns: [from, to, distance].')
     parser.add_argument('--normalized_k', type=float, default=0.1,
                         help='Entries that become lower than normalized_k after normalization are set to zero for sparsity.')

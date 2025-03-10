@@ -7,7 +7,7 @@ import yaml
 
 from lib.utils import load_graph_data
 from model.pytorch.dcrnn_supervisor import DCRNNSupervisor
-
+import torch
 
 def main(args):
 
@@ -21,6 +21,10 @@ def main(args):
 
         supervisor = DCRNNSupervisor(adj_mx=adj_mx, **supervisor_config)
 
+        if args.resume is not None:
+            # supervisor._epoch_num = 92
+            supervisor.load_model2()
+
         supervisor.train()
 
 
@@ -29,5 +33,6 @@ if __name__ == '__main__':
     parser.add_argument('--config_filename', default=None, type=str,
                         help='Configuration filename for restoring the model.')
     parser.add_argument('--use_cpu_only', default=False, type=bool, help='Set to true to only use cpu.')
+    parser.add_argument('--resume', default=None, type=str, help='Old .tar Checkpoint file to continue from')
     args = parser.parse_args()
     main(args)

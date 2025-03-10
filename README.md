@@ -85,7 +85,7 @@ python -m scripts.generate_training_data --output_dir=data/PEMS-BAY --traffic_df
 mkdir -p data/data_folder
 
 # Generate data
-python -m scripts.generate_training_data --output_dir=data/data_folder --traffic_df_filename=data/processed_data.h5
+python -m scripts.generate_training_data 
 ```
 
 ## Graph Construction
@@ -103,12 +103,12 @@ python -m scripts.generate_sensor_id
 python -m scripts.generate_distances_file
 
 # See sensor_id.txt
-cat data/sensor_id.txt
+cat data/preprocess/sensor_id.txt
 # 02t,03t,11t,12t,...
 # Note: These are station names in the order of the columns in df separated by comma
 
 # See the distances data
-cat data/distances.csv
+cat data/preprocess/distances.csv
 # from,to,distance
 # 02t,03t,13.238260735847284
 # 02t,11t,10.133110118413628
@@ -129,10 +129,7 @@ python -m scripts.gen_adj_mx  --sensor_ids_filename=data/sensor_graph/graph_sens
 # ---------------------
 
 # Adjacency Matrix
-python -m scripts.gen_adj_mx --normalized_k=0.1\
---sensor_ids_filename=data/sensor_id.txt\
----distances_filename=data/distances.csv\
---output_pkl_filename=data/sensor_graph/adj_mx.pkl
+python -m scripts.gen_adj_mx 
 ```
 Besides, the locations of sensors in Los Angeles, i.e., METR-LA, are available at [data/sensor_graph/graph_sensor_locations.csv](https://github.com/liyaguang/DCRNN/blob/master/data/sensor_graph/graph_sensor_locations.csv). 
 

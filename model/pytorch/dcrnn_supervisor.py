@@ -95,6 +95,13 @@ class DCRNNSupervisor:
         self.dcrnn_model.load_state_dict(checkpoint['model_state_dict'])
         self._logger.info("Loaded model at {}".format(self._epoch_num))
 
+    def load_model2(self, addr):
+        self._setup_graph()
+        assert os.path.exists(addr), f'Weights at {addr} cannot be found'
+        checkpoint = torch.load(addr, map_location='cpu')
+        self.dcrnn_model.load_state_dict(checkpoint['model_state_dict'])
+        self._logger.info("Loaded model at {}".format(addr))
+
     def _setup_graph(self):
         with torch.no_grad():
             self.dcrnn_model = self.dcrnn_model.eval()
