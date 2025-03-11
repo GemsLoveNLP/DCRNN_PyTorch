@@ -23,7 +23,7 @@ def main(args):
 
         if args.resume is not None:
             # supervisor._epoch_num = 92
-            supervisor.load_model2()
+            supervisor.load_model2(args.resume)
 
         supervisor.train()
 
