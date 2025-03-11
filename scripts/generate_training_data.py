@@ -59,10 +59,10 @@ def generate_train_val_test(args):
     # 0 is the latest observed sample.
     x_offsets = np.sort(
         # np.concatenate(([-week_size + 1, -day_size + 1], np.arange(-11, 1, 1)))
-        np.concatenate((np.arange(-23, 1, 1),))
+        np.concatenate((np.arange(-int(args.seq_len)+1, 1, 1),))
     )
     # Predict the next one hour
-    y_offsets = np.sort(np.arange(1, 25, 1))
+    y_offsets = np.sort(np.arange(1, int(args.horizon)+1, 1))
     # print(x_offsets, y_offsets)
     # x: (num_samples, input_length, num_nodes, input_dim)
     # y: (num_samples, output_length, num_nodes, output_dim)
@@ -114,6 +114,12 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "--output_dir", type=str, default="data/data_folder", help="Output directory."
+    )
+    parser.add_argument(
+        "--seq_len", type=str, default="24", help="The number of time steps that the model will consider"
+    )
+    parser.add_argument(
+        "--horizon", type=str, default="24", help="The number of time steps that the model will output"
     )
     parser.add_argument(
         "--traffic_df_filename",

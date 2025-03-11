@@ -2,38 +2,46 @@ data:
   # Data specific parameters
   graph_pkl_filename: "data/graph_folder/adj_mx.pkl"  # Path to the adjacency matrix
   dataset_dir: "data/data_folder"  # Path to time series data
-  batch_size: 32  # Batch size for training and evaluation
+  batch_size: 64  # Batch size for training and evaluation
+  val_batch_size: 64
   test_batch_size: 64
   scaler_file: "data/scaler.pkl"  # File for scaler object used for standardization
 # 
 model:
   # Model architecture parameters
+  cl_decay_steps: 2000
+  l1_decay: 0
+  use_curriculum_learning: true
   num_nodes: 92  # Number of nodes (sensors)
   input_dim: 2  # Input feature dimension (e.g., one feature per sensor)
   output_dim: 1  # Output feature dimension
   num_rnn_layers: 2  # Number of RNN layers
-  rnn_units: 128  # Number of units in each RNN layer
+  rnn_units: 64  # Number of units in each RNN layer
   max_diffusion_step: 3  # Max diffusion step for graph convolution
   use_curriculum_learning: false  # Whether to use curriculum learning
-  filter_type: "dual random_walk"  # Diffusion model filter, in case there are other factors than uni directional wind
+  filter_type: "dual_random_walk"  # Diffusion model filter, in case there are other factors than uni directional wind
   filter_type_abbr: "R"  # Abbreviation for the filter type
-  dropout: 0.35  # Dropout rate for the model layers
-  seq_len: 24  # Sequence length for the encoder (input sequence length)
+  seq_len: 72  # Sequence length for the encoder (input sequence length)
   horizon: 24 # Predict the next 24 steps
 
 train:
   # Training specific parameters
-  epochs: 180  # Number of training epochs
   learning_rate: 0.001  # Learning rate for the optimizer
-  base_lr: 0.001  # Base learning rate for training
-  steps: [50, 100, 150]  # Learning rate decay milestones
+  base_lr: 0.01  # Base learning rate for training
+  dropout: 0.4  # Dropout rate for the model layers
+  epoch: 0
+  epochs: 180  # Number of training epochs
+  epsilon: 0.0001  # Epsilon for the Adam optimizer
+  global_step: 0
   lr_decay_ratio: 0.1  # Learning rate decay ratio
+  max_grad_norm: 5.0  # Maximum gradient norm for gradient clipping
+  steps: [20, 30, 40, 50]  # Learning rate decay milestones
   patience: 50  # Early stopping patience
   test_every_n_epochs: 10  # How often to evaluate the model on the test set
   save_model: 1  # Whether to save the model at each epoch
   log_every: 1  # Frequency of logging during training
-  max_grad_norm: 5.0  # Maximum gradient norm for gradient clipping
-  epsilon: 0.00000001  # Epsilon for the Adam optimizer
+
+  
 
 logging:
   # Logging related parameters
