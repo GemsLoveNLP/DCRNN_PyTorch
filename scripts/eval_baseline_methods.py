@@ -88,7 +88,7 @@ def var_predict(df, n_forwards=(1, 3), n_lags=4, test_ratio=0.2):
 
 def eval_static(traffic_reading_df):
     logger.info('Static')
-    horizons = [1, 3, 6, 12]
+    horizons = [1, 3, 6, 12, 24]
     logger.info('\t'.join(['Model', 'Horizon', 'RMSE', 'MAPE', 'MAE']))
     for horizon in horizons:
         y_predict, y_test = static_predict(traffic_reading_df, n_forward=horizon, test_ratio=0.2)
@@ -106,13 +106,14 @@ def eval_historical_average(traffic_reading_df, period):
     mae = masked_mae_np(preds=y_predict.values, labels=y_test.values, null_val=0)
     logger.info('Historical Average')
     logger.info('\t'.join(['Model', 'Horizon', 'RMSE', 'MAPE', 'MAE']))
-    for horizon in [1, 3, 6, 12]:
+    for horizon in [1, 3, 6, 12, 24]:
         line = 'HA\t%d\t%.2f\t%.2f\t%.2f' % (horizon, rmse, mape * 100, mae)
         logger.info(line)
 
 
 def eval_var(traffic_reading_df, n_lags=3):
-    n_forwards = [1, 3, 6, 12]
+    # n_forwards = [1, 3, 6, 12, 24]
+    n_forwards = [24]
     y_predicts, y_test = var_predict(traffic_reading_df, n_forwards=n_forwards, n_lags=n_lags,
                                      test_ratio=0.2)
     logger.info('VAR (lag=%d)' % n_lags)
@@ -123,17 +124,21 @@ def eval_var(traffic_reading_df, n_lags=3):
         mae = masked_mae_np(preds=y_predicts[i].values, labels=y_test.values, null_val=0)
         line = 'VAR\t%d\t%.2f\t%.2f\t%.2f' % (horizon, rmse, mape * 100, mae)
         logger.info(line)
+    return mae
 
 
 def main(args):
     traffic_reading_df = pd.read_hdf(args.traffic_reading_filename)
-    eval_static(traffic_reading_df)
-    eval_historical_average(traffic_reading_df, period=7 * 24 * 12)
-    eval_var(traffic_reading_df, n_lags=3)
+    # eval_static(traffic_reading_df)
+    # eval_historical_average(traffic_reading_df, period=7 * 24)
+    l = []
+    for n_lags in range(1,73):
+        l.append(eval_var(traffic_reading_df, n_lags=n_lags))
+    print(l)
 
 
 if __name__ == '__main__':
-    logger = utils.get_logger('data/model', 'Baseline')
+    logger = utils.get_logger('data/base_model', 'Baseline')
     parser = argparse.ArgumentParser()
     parser.add_argument('--traffic_reading_filename', default="data/metr-la.h5", type=str,
                         help='Path to the traffic Dataframe.')
