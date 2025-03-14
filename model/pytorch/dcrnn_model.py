@@ -4,6 +4,8 @@ import torch.nn as nn
 
 from model.pytorch.dcrnn_cell import DCGRUCell
 
+import torch.nn.functional as F
+
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 
