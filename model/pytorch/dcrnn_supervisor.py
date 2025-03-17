@@ -46,8 +46,8 @@ class DCRNNSupervisor:
         self._logger.info("Model created")
 
         self._epoch_num = self._train_kwargs.get('epoch', 0)
-        if self._epoch_num > 0:
-            self.load_model()
+        # if self._epoch_num > 0:
+        #     self.load_model()
 
     @staticmethod
     def _get_log_dir(kwargs):
@@ -101,6 +101,14 @@ class DCRNNSupervisor:
         checkpoint = torch.load(addr, map_location='cpu')
         self.dcrnn_model.load_state_dict(checkpoint['model_state_dict'])
         self._logger.info("Loaded model at {}".format(addr))
+
+    # def load_model2(self, addr):
+    #     self._setup_graph()
+    #     assert os.path.exists(addr), f'Weights at {addr} cannot be found'
+    #     checkpoint = torch.load(addr, map_location=torch.device("cuda" if torch.cuda.is_available() else "cpu"))
+    #     self.dcrnn_model.load_state_dict(checkpoint['model_state_dict'])
+    #     self.dcrnn_model = self.dcrnn_model.to(torch.device("cuda" if torch.cuda.is_available() else "cpu"))  # Move model to GPU
+    #     self._logger.info("Loaded model at {}".format(addr))
 
     def _setup_graph(self):
         with torch.no_grad():
