@@ -10,33 +10,30 @@ data:
 model:
   # Model architecture parameters
   cl_decay_steps: 2000
-  # l1_decay: 0.5
-  # l2_decay: 0.5
   use_curriculum_learning: true
   num_nodes: 92  # Number of nodes (sensors)
   input_dim: 2  # Input feature dimension (e.g., one feature per sensor)
   output_dim: 1  # Output feature dimension
   num_rnn_layers: 3  # Number of RNN layers
-  rnn_units: 64  # Number of units in each RNN layer
+  rnn_units: 32  # Number of units in each RNN layer
   max_diffusion_step: 2  # Max diffusion step for graph convolution
-  use_curriculum_learning: true  # Whether to use curriculum learning
   filter_type: "dual_random_walk"  # Diffusion model filter, in case there are other factors than uni directional wind
   filter_type_abbr: "R"  # Abbreviation for the filter type
-  seq_len: 4  # Sequence length for the encoder (input sequence length)
+  seq_len: 24  # Sequence length for the encoder (input sequence length)
   horizon: 24 # Predict the next 24 steps
 # 
 train:
   # Training specific parameters
-  base_lr: 0.0001  # Base learning rate for training
-  dropout: 0.2  # Dropout rate for the model layers
+  weight_decay: 0.4
+  base_lr: 0.001  # Base learning rate for training
+  dropout: 0.3  # Dropout rate for the model layers
   epoch: 0
   epochs: 200  # Number of training epochs
   epsilon: 0.0001  # Epsilon for the Adam optimizer
   global_step: 0
   lr_decay_ratio: 0.1  # Learning rate decay ratio
   max_grad_norm: 5.0  # Maximum gradient norm for gradient clipping
-  min_learning_rate: 2.0e-06
-  steps: [20, 30, 40, 50]  # Learning rate decay milestones
+  steps: [2, 3, 5, 10, 20, 40, 80, 120]  # Learning rate decay milestones
   patience: 20  # Early stopping patience
   test_every_n_epochs: 10  # How often to evaluate the model on the test set
   save_model: 1  # Whether to save the model at each epoch

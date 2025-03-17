@@ -1,6 +1,6 @@
 # Diffusion Convolutional Recurrent Neural Network: Data-Driven Traffic Forecasting
 
-### Current best performance: "legacy_models/first_new_data_epo6.tar" (MAE: 6.433152079582214)
+### Current best performance: "legacy_models/slow_rate" (MAE: 6.011509418487549)
 
 ![Diffusion Convolutional Recurrent Neural Network](figures/model_architecture.jpg "Model Architecture")
 

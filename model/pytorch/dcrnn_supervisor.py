@@ -46,8 +46,8 @@ class DCRNNSupervisor:
         self._logger.info("Model created")
 
         self._epoch_num = self._train_kwargs.get('epoch', 0)
-        if self._epoch_num > 0:
-            self.load_model()
+        # if self._epoch_num > 0:
+        #     self.load_model()
 
     @staticmethod
     def _get_log_dir(kwargs):
@@ -101,6 +101,14 @@ class DCRNNSupervisor:
         checkpoint = torch.load(addr, map_location='cpu')
         self.dcrnn_model.load_state_dict(checkpoint['model_state_dict'])
         self._logger.info("Loaded model at {}".format(addr))
+
+    # def load_model2(self, addr):
+    #     self._setup_graph()
+    #     assert os.path.exists(addr), f'Weights at {addr} cannot be found'
+    #     checkpoint = torch.load(addr, map_location=torch.device("cuda" if torch.cuda.is_available() else "cpu"))
+    #     self.dcrnn_model.load_state_dict(checkpoint['model_state_dict'])
+    #     self.dcrnn_model = self.dcrnn_model.to(torch.device("cuda" if torch.cuda.is_available() else "cpu"))  # Move model to GPU
+    #     self._logger.info("Loaded model at {}".format(addr))
 
     def _setup_graph(self):
         with torch.no_grad():
@@ -160,11 +168,15 @@ class DCRNNSupervisor:
 
     def _train(self, base_lr,
                steps, patience=50, epochs=100, lr_decay_ratio=0.1, log_every=1, save_model=1,
-               test_every_n_epochs=10, epsilon=1e-8, **kwargs):
+               test_every_n_epochs=10, epsilon=1e-8, weight_decay=0.1, **kwargs):
         # steps is used in learning rate - will see if need to use it?
+        # print("base_lr",base_lr,"\nweight_decay", weight_decay)
         min_val_loss = float('inf')
         wait = 0
-        optimizer = torch.optim.Adam(self.dcrnn_model.parameters(), lr=base_lr, eps=epsilon)
+        optimizer = torch.optim.Adam(self.dcrnn_model.parameters(), 
+                                     lr=base_lr, 
+                                     eps=epsilon, 
+                                     weight_decay=weight_decay)
 
         lr_scheduler = torch.optim.lr_scheduler.MultiStepLR(optimizer, milestones=steps,
                                                             gamma=lr_decay_ratio)
@@ -223,7 +235,7 @@ class DCRNNSupervisor:
                                     batches_seen)
 
             if (epoch_num % log_every) == log_every - 1:
-                message = 'Epoch [{}/{}] ({}) train_mae: {:.4f}, val_mae: {:.4f}, lr: {:.6f}, ' \
+                message = 'Epoch [{}/{}] ({}) train_mae: {:.4f}, val_mae: {:.4f}, lr: {:.2e}, ' \
                           '{:.1f}s'.format(epoch_num, epochs, batches_seen,
                                            np.mean(losses), val_loss, lr_scheduler.get_lr()[0],
                                            (end_time - start_time))
@@ -231,7 +243,7 @@ class DCRNNSupervisor:
 
             if (epoch_num % test_every_n_epochs) == test_every_n_epochs - 1:
                 test_loss, _ = self.evaluate(dataset='test', batches_seen=batches_seen)
-                message = 'Epoch [{}/{}] ({}) train_mae: {:.4f}, test_mae: {:.4f},  lr: {:.6f}, ' \
+                message = 'Epoch [{}/{}] ({}) train_mae: {:.4f}, test_mae: {:.4f},  lr: {:.2e}, ' \
                           '{:.1f}s'.format(epoch_num, epochs, batches_seen,
                                            np.mean(losses), test_loss, lr_scheduler.get_lr()[0],
                                            (end_time - start_time))
