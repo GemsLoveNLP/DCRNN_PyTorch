@@ -2,7 +2,7 @@ import pandas as pd
 import os
 
 # Load the dataframe from the original file
-input_filename = "data/preprocess/cleaned_data.csv"
+input_filename = "data/preprocess/scaled_data.csv"
 output_filename = "data/preprocess/processed_data.h5"
 
 # Load the DataFrame from the h5 file
